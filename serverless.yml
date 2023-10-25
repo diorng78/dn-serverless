@@ -1,0 +1,33 @@
+org: diorng78
+app: dn-serverless
+service: dn-serverless
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+# The "Resources" your "Functions" use. Raw AWS CloudFormation goes in here.
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+         ReadCapacityUnits: 1
+         WriteCapacityUnits: 1
